@@ -12,14 +12,11 @@ import java.util.ArrayList;
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder> {
 
     private ArrayList<EventModel> eventList;
-    private OnItemClickListener listener; // Tıklama dinleyicisi
-
-    // Tıklama olayını dışarıya (HomeFragment'a) bildirmek için bir arayüz
+    private OnItemClickListener listener;
     public interface OnItemClickListener {
         void onItemClick(EventModel event);
     }
 
-    // Listener'ı ayarlamak için metod
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
@@ -45,7 +42,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         // KARTIN TAMAMINA TIKLAMA OLAYI
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
-                listener.onItemClick(event); // Tıklanan eventi HomeFragment'a yolla
+                listener.onItemClick(event);
             }
         });
     }

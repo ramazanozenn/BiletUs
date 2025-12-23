@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
-    private ArrayList<EventModel> eventList; // Değişkenleri burada tanımlıyoruz
+    private ArrayList<EventModel> eventList;
     private EventAdapter adapter;
 
     @Override
@@ -32,25 +32,18 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // 1. Verileri Oluştur
         createDummyData();
 
-        // 2. Adapter'ı Hazırla
         adapter = new EventAdapter(eventList);
 
-        // 3. TIKLAMA OLAYINI YAKALA (Dinleyici)
         adapter.setOnItemClickListener(event -> {
-            // Tıklanan etkinliği paketle (Bundle)
             Bundle bundle = new Bundle();
             bundle.putSerializable("selected_event", event);
 
-            // Detay sayfasına paketle beraber git
             Navigation.findNavController(view)
                     .navigate(R.id.eventDetailFragment, bundle);
         });
 
-        // 4. RecyclerView Ayarları ve Bağlama
-        // XML dosyanızdaki ID 'eventsRecyclerView' olmalı.
         binding.recyclerViewEvents.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recyclerViewEvents.setHasFixedSize(true);
         binding.recyclerViewEvents.setAdapter(adapter);
@@ -59,13 +52,12 @@ public class HomeFragment extends Fragment {
     private void createDummyData() {
         eventList = new ArrayList<>();
 
-        // Artık modelimiz FİYAT bilgisini de (4. sırada) kabul ediyor:
         eventList.add(new EventModel(
                 "Hayko Cepkin Concert",
                 "14 Oct • 21:00",
                 "Maximum Uniq Hall",
                 "650 TL",
-                R.drawable.img_hayko)); // Veya R.drawable.ic_launcher_background
+                R.drawable.img_hayko));
 
         eventList.add(new EventModel(
                 "MilyonFest Istanbul",
@@ -79,7 +71,7 @@ public class HomeFragment extends Fragment {
                 "05 Dec • 21:00",
                 "Harbiye Açıkhava",
                 "500 TL",
-                R.drawable.img_teoman)); // Uygun resim yoksa diğerlerini kullan
+                R.drawable.img_teoman));
     }
 
     @Override

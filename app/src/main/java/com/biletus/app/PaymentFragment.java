@@ -28,12 +28,9 @@ public class PaymentFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // ÖDEMEYİ TAMAMLA BUTONU
         binding.btnCompletePayment.setOnClickListener(v -> {
-            // 1. Başarılı mesajı göster
             Toast.makeText(requireContext(), "Payment Successful! Enjoy the concert! 🎉", Toast.LENGTH_LONG).show();
 
-            // 2. Ana Sayfaya Dön (Tüm geçmişi silerek)
             Navigation.findNavController(v).popBackStack(R.id.homeFragment, false);
         });
     }

@@ -32,7 +32,6 @@ public class SearchFragment extends Fragment {
     }
 
     private void setupHistoryList() {
-        // 1. VERİLER (Resimdeki örnekler)
         List<SearchHistoryModel> historyList = new ArrayList<>();
         historyList.add(new SearchHistoryModel("Hayko Cepkin Concert"));
         historyList.add(new SearchHistoryModel("MilyonFest Festival"));
@@ -40,14 +39,10 @@ public class SearchFragment extends Fragment {
         historyList.add(new SearchHistoryModel("Tarkan Harbiye"));
         historyList.add(new SearchHistoryModel("Istanbul Modern Art"));
 
-        // 2. ADAPTÖR
         SearchHistoryAdapter adapter = new SearchHistoryAdapter(historyList);
 
-        // 3. RECYCLERVIEW AYARLARI
-        // XML dosyasında verdiğimiz ID: recent_searches_recycler
         binding.recentSearchesRecycler.setHasFixedSize(true);
 
-        // LinearLayoutManager: Alt alta liste yapar
         binding.recentSearchesRecycler.setLayoutManager(new LinearLayoutManager(requireContext()));
 
         binding.recentSearchesRecycler.setAdapter(adapter);

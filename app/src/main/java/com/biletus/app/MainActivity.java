@@ -15,18 +15,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // 1. Binding ile tasarımı yüklüyoruz (TEK SEFER)
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // 2. Navigasyon Yöneticisini (Controller) Buluyoruz
-        // FragmentContainerView kullandığımız için yöntemimiz bu olmalı:
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.fragmentContainerView);
 
         if (navHostFragment != null) {
             NavController navController = navHostFragment.getNavController();
-            // 3. Alt Menü ile Navigasyonu Birleştiriyoruz
             NavigationUI.setupWithNavController(binding.bottomNavigationView, navController);
         }
     }

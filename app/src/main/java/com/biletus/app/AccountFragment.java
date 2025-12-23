@@ -11,7 +11,7 @@ public class AccountFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Tasarımı (layout) şişiriyoruz
+
         return inflater.inflate(R.layout.fragment_account, container, false);
     }
 }

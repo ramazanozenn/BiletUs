@@ -27,13 +27,10 @@ public class FavoritesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // 1. Favori Listesini Manager'dan Al
         ArrayList<EventModel> myFavorites = FavoritesManager.getInstance().getFavorites();
 
-        // 2. Adapter Kur (Aynı HomeFragment'taki gibi)
         adapter = new EventAdapter(myFavorites);
 
-        // Favorilerden detay sayfasına gitmek istersen yine tıklama ekleyebilirsin:
         adapter.setOnItemClickListener(event -> {
             Bundle bundle = new Bundle();
             bundle.putSerializable("selected_event", event);
@@ -41,12 +38,10 @@ public class FavoritesFragment extends Fragment {
                     .navigate(R.id.eventDetailFragment, bundle);
         });
 
-        // 3. Listeyi Göster
         binding.favoritesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.favoritesRecyclerView.setAdapter(adapter);
     }
 
-    // Sayfaya her geri dönüldüğünde listeyi yenilemek için (örneğin detayda favoriden çıkarırsan)
     @Override
     public void onResume() {
         super.onResume();
