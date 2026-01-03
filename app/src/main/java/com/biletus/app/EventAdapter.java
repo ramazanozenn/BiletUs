@@ -7,11 +7,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import java.util.ArrayList;
+import java.util.List;
 
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder> {
 
-    private ArrayList<EventModel> eventList;
+    private List<EventModel> eventList;
     private OnItemClickListener listener;
     public interface OnItemClickListener {
         void onItemClick(EventModel event);
@@ -21,7 +21,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         this.listener = listener;
     }
 
-    public EventAdapter(ArrayList<EventModel> eventList) {
+    public EventAdapter(List<EventModel> eventList) {
         this.eventList = eventList;
     }
 

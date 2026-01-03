@@ -70,9 +70,20 @@ public class EventDetailFragment extends Fragment {
             requireActivity().getOnBackPressedDispatcher().onBackPressed();
         });
 
+        // EventDetailFragment.java içinde ilgili kısmı bul ve bununla değiştir:
+
         binding.btnBuyTicket.setOnClickListener(v -> {
-            Navigation.findNavController(v).navigate(R.id.action_eventDetailFragment_to_ticketSelectionFragment);
-            Toast.makeText(requireContext(), "Ticket Added to Cart! 🎟️", Toast.LENGTH_SHORT).show();
+            // 1. Bir çanta (Bundle) oluştur
+            Bundle bundle = new Bundle();
+
+            // 2. İçine seçilen etkinliği koy (Anahtar kelime: "selected_event")
+            bundle.putSerializable("selected_event", currentEvent);
+
+            // 3. Sayfayı değiştirirken çantayı da yanına ver
+            Navigation.findNavController(v).navigate(R.id.action_eventDetailFragment_to_ticketSelectionFragment, bundle);
+
+            // Mesaj ver
+            Toast.makeText(requireContext(), "Ticket Selection Started 🎟️", Toast.LENGTH_SHORT).show();
         });
     }
 

@@ -9,6 +9,11 @@ public class EventModel implements Serializable {
     private String eventPrice;
     private int imageResourceId;
 
+    // 👇 1. FIREBASE İÇİN ZORUNLU OLAN BOŞ CONSTRUCTOR
+    public EventModel() {
+    }
+
+    // 2. Normal Constructor (Bizim kullandığımız)
     public EventModel(String eventName, String eventDate, String eventLocation, String eventPrice, int imageResourceId) {
         this.eventName = eventName;
         this.eventDate = eventDate;
@@ -17,9 +22,19 @@ public class EventModel implements Serializable {
         this.imageResourceId = imageResourceId;
     }
 
+    // 👇 3. Getter ve Setter'lar (Firebase veri okurken bunlara ihtiyaç duyar)
     public String getEventName() { return eventName; }
+    public void setEventName(String eventName) { this.eventName = eventName; }
+
     public String getEventDate() { return eventDate; }
+    public void setEventDate(String eventDate) { this.eventDate = eventDate; }
+
     public String getEventLocation() { return eventLocation; }
+    public void setEventLocation(String eventLocation) { this.eventLocation = eventLocation; }
+
     public String getEventPrice() { return eventPrice; }
+    public void setEventPrice(String eventPrice) { this.eventPrice = eventPrice; }
+
     public int getImageResourceId() { return imageResourceId; }
+    public void setImageResourceId(int imageResourceId) { this.imageResourceId = imageResourceId; }
 }

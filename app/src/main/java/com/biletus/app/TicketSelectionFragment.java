@@ -4,21 +4,29 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+
 import com.biletus.app.databinding.FragmentTicketSelectionBinding;
 
 public class TicketSelectionFragment extends Fragment {
 
     private FragmentTicketSelectionBinding binding;
 
-    private final int PRICE_STUDENT = 450;
-    private final int PRICE_ADULT = 650;
+    // Sayaçlar
+    private int countStudent = 0;
+    private int countAdult = 0;
 
-    private int currentQty = 1;
-    private boolean isAdultSelected = true;
+    // Fiyatlar
+    private int priceStudent = 0;
+    private int priceAdult = 0;
+
+    // ⚠️ YENİ EKLENEN: Etkinliği burada tutuyoruz
+    private EventModel currentEvent;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -31,80 +39,70 @@ public class TicketSelectionFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // 1. Gelen Veriyi Al
+        if (getArguments() != null) {
+            currentEvent = (EventModel) getArguments().getSerializable("selected_event");
+
+            if (currentEvent != null) {
+                binding.txtEventNameSmall.setText(currentEvent.getEventName());
+                binding.txtEventDateSmall.setText("📅 " + currentEvent.getEventDate());
+
+                if (currentEvent.getImageResourceId() != 0) {
+                    binding.imgEventSmall.setImageResource(currentEvent.getImageResourceId());
+                }
+
+                // Dinamik Fiyat Hesaplama
+                String rawPrice = currentEvent.getEventPrice();
+                priceAdult = parsePrice(rawPrice);
+                priceStudent = (priceAdult > 100) ? (priceAdult - 100) : (priceAdult / 2);
+            }
+        }
+
+        binding.txtPriceStudentLabel.setText(priceStudent + " TL");
+        binding.txtPriceAdultLabel.setText(priceAdult + " TL");
+
+        // Butonlar (Artı/Eksi)
+        binding.btnStudentPlus.setOnClickListener(v -> { countStudent++; updateUI(); });
+        binding.btnStudentMinus.setOnClickListener(v -> { if(countStudent>0) countStudent--; updateUI(); });
+
+        binding.btnAdultPlus.setOnClickListener(v -> { countAdult++; updateUI(); });
+        binding.btnAdultMinus.setOnClickListener(v -> { if(countAdult>0) countAdult--; updateUI(); });
+
+        // ÖDEME BUTONU (Güncellendi)
+        binding.btnConfirmPayment.setOnClickListener(v -> {
+            int total = (countStudent * priceStudent) + (countAdult * priceAdult);
+            if (total == 0) {
+                Toast.makeText(requireContext(), "Please add at least one ticket!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            Bundle bundle = new Bundle();
+            bundle.putInt("total_price", total);
+            // ⚠️ YENİ EKLENEN: Etkinlik bilgisini de gönderiyoruz!
+            bundle.putSerializable("selected_event", currentEvent);
+
+            Navigation.findNavController(v).navigate(R.id.action_ticketSelectionFragment_to_paymentFragment, bundle);
+        });
+
+        binding.btnBack.setOnClickListener(v -> requireActivity().getOnBackPressedDispatcher().onBackPressed());
+
         updateUI();
+    }
 
-
-        binding.rowStudent.setOnClickListener(v -> {
-            isAdultSelected = false; // Artık Student seçili
-            currentQty = 1;          // Adedi sıfırla
-            updateUI();              // Ekranı yenile
-        });
-
-        binding.rowAdult.setOnClickListener(v -> {
-            isAdultSelected = true;  // Adult seçili
-            currentQty = 1;          // Adedi sıfırla
-            updateUI();              // Ekranı yenile
-        });
-
-
-        binding.btnMinusStudent.setOnClickListener(v -> {
-            if (currentQty > 1) {
-                currentQty--;
-                updateUI();
-            }
-        });
-        binding.btnPlusStudent.setOnClickListener(v -> {
-            currentQty++;
-            updateUI();
-        });
-
-        binding.btnMinusAdult.setOnClickListener(v -> {
-            if (currentQty > 1) {
-                currentQty--;
-                updateUI();
-            }
-        });
-        binding.btnPlusAdult.setOnClickListener(v -> {
-            currentQty++;
-            updateUI();
-        });
-
-        binding.btnBackSelection.setOnClickListener(v ->
-                requireActivity().getOnBackPressedDispatcher().onBackPressed()
-        );
-
-        binding.btnGoPayment.setOnClickListener(v -> {
-            Navigation.findNavController(v).navigate(R.id.action_ticketSelectionFragment_to_paymentFragment);
-        });
+    private int parsePrice(String priceString) {
+        try {
+            if (priceString == null) return 500;
+            String numberOnly = priceString.replaceAll("[^0-9]", "");
+            return numberOnly.isEmpty() ? 500 : Integer.parseInt(numberOnly);
+        } catch (Exception e) { return 500; }
     }
 
     private void updateUI() {
-        int totalPrice;
-
-        if (isAdultSelected) {
-            binding.layoutCounterAdult.setVisibility(View.VISIBLE);
-            binding.layoutCounterStudent.setVisibility(View.GONE);
-
-            totalPrice = currentQty * PRICE_ADULT;
-
-            binding.txtQtyAdult.setText(String.valueOf(currentQty));
-            binding.txtPriceAdult.setText(totalPrice + " TL");
-
-            binding.txtPriceStudent.setText(PRICE_STUDENT + " TL");
-
-        } else {
-            binding.layoutCounterStudent.setVisibility(View.VISIBLE);
-            binding.layoutCounterAdult.setVisibility(View.GONE);
-
-            totalPrice = currentQty * PRICE_STUDENT;
-
-            binding.txtQtyStudent.setText(String.valueOf(currentQty));
-            binding.txtPriceStudent.setText(totalPrice + " TL");
-
-            binding.txtPriceAdult.setText(PRICE_ADULT + " TL");
-        }
-
-        binding.btnGoPayment.setText("TOTAL PRICE: " + totalPrice + " TL\nGO TO PAYMENT");
+        binding.txtStudentCount.setText(String.valueOf(countStudent));
+        binding.txtAdultCount.setText(String.valueOf(countAdult));
+        int total = (countStudent * priceStudent) + (countAdult * priceAdult);
+        binding.txtTotalPrice.setText(total + " TL");
+        binding.btnConfirmPayment.setText(total > 0 ? "Pay " + total + " TL" : "Confirm Payment");
     }
 
     @Override

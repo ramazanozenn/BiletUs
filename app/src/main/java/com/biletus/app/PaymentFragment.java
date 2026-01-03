@@ -28,11 +28,54 @@ public class PaymentFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binding.btnCompletePayment.setOnClickListener(v -> {
-            Toast.makeText(requireContext(), "Payment Successful! Enjoy the concert! 🎉", Toast.LENGTH_LONG).show();
+        int totalPrice = 0;
+        EventModel currentEvent = null;
 
+        // --- GELEN VERİYİ AL ---
+        if (getArguments() != null) {
+            totalPrice = getArguments().getInt("total_price", 0);
+            currentEvent = (EventModel) getArguments().getSerializable("selected_event");
+        }
+
+        // --- EKRANA BAS ---
+        binding.btnCompletePayment.setText("PAY " + totalPrice + " TL");
+
+        if (currentEvent != null) {
+            if (binding.txtEventName != null)
+                binding.txtEventName.setText(currentEvent.getEventName());
+
+            if (binding.txtEventDate != null)
+                binding.txtEventDate.setText(currentEvent.getEventDate());
+
+            // Resim varsa koy
+            if (binding.imgEventHeader != null && currentEvent.getImageResourceId() != 0) {
+                binding.imgEventHeader.setImageResource(currentEvent.getImageResourceId());
+            }
+        }
+
+        // --- ÖDEME BUTONU ---
+        binding.btnCompletePayment.setOnClickListener(v -> {
+
+            // 1. BOŞ ALAN KONTROLÜ (Validation)
+            String cardNumber = binding.etCardNumber.getText().toString();
+            String cardHolder = binding.etCardHolder.getText().toString();
+            String expiry = binding.etExpiryDate.getText().toString();
+            String cvv = binding.etCvv.getText().toString();
+
+            if (cardNumber.isEmpty() || cardHolder.isEmpty() || expiry.isEmpty() || cvv.isEmpty()) {
+                Toast.makeText(requireContext(), "Please fill in all card details!", Toast.LENGTH_SHORT).show();
+                return; // İşlemi durdur
+            }
+
+            // 2. HER ŞEY TAMAMSA ÖDEMEYİ YAP
+            Toast.makeText(requireContext(), "Payment Successful! Enjoy the concert! 🎉", Toast.LENGTH_LONG).show();
             Navigation.findNavController(v).popBackStack(R.id.homeFragment, false);
         });
+
+        // Geri Butonu
+        if (binding.btnBack != null) {
+            binding.btnBack.setOnClickListener(v -> Navigation.findNavController(v).popBackStack());
+        }
     }
 
     @Override
