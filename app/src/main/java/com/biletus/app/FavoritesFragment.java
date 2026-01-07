@@ -1,3 +1,7 @@
+//Coded by Ramazan
+
+
+
 package com.biletus.app;
 
 import android.os.Bundle;
@@ -31,26 +35,18 @@ public class FavoritesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // 1. Veriyi 'List' türünde çekiyoruz (Firebase Manager List döndürüyor)
         List<EventModel> myFavorites = FavoritesManager.getInstance().getFavorites();
 
-        // 2. Adapter'a bu listeyi veriyoruz
-        // (EventAdapter dosyasında ArrayList yerine List yaptığından emin ol)
         adapter = new EventAdapter(myFavorites);
 
-        // 3. Tıklama Olayı (Detay sayfasına git)
         adapter.setOnItemClickListener(event -> {
             Bundle bundle = new Bundle();
             bundle.putSerializable("selected_event", event);
 
-            // Eğer 'eventDetailFragment' ID'si nav_graph.xml'de varsa çalışır.
-            // Yoksa oradaki action ID'sini kullanman gerekebilir (örn: R.id.action_favorites_to_detail)
             Navigation.findNavController(view)
                     .navigate(R.id.eventDetailFragment, bundle);
         });
 
-        // 4. RecyclerView Ayarları
-        // XML dosyasındaki ID'nin 'favoritesRecyclerView' olduğundan emin ol
         binding.favoritesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.favoritesRecyclerView.setAdapter(adapter);
     }
@@ -58,7 +54,6 @@ public class FavoritesFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        // Sayfa tekrar ekrana gelince listeyi yenile (Firebase verisi güncellenmiş olabilir)
         if(adapter != null) {
             adapter.notifyDataSetChanged();
         }

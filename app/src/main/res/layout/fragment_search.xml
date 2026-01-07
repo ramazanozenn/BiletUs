@@ -22,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="BiletUs"
-            android:textColor="@color/biletus_pink"
+            android:textColor="#E91E63"
             android:textSize="28sp"
             android:textStyle="bold" />
 
@@ -30,19 +30,20 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_marginStart="8dp"
-            android:src="@drawable/ic_logo"
-            app:tint="#00BCD4" />
+            android:src="@drawable/ic_biletus"
+            app:tint="#00BCD4"
+            tools:ignore="ContentDescription" />
     </LinearLayout>
 
     <EditText
-        android:id="@+id/search_input"
+        android:id="@+id/searchInput"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginTop="16dp"
-        android:background="@drawable/search_bar_background"
-        android:drawableStart="@drawable/ic_search"
+        android:background="@drawable/bg_category_unselected"
+        android:drawableStart="@android:drawable/ic_menu_search"
         android:drawablePadding="12dp"
-        android:hint="Search for events, artists or venue..."
+        android:hint="Search for events, artists..."
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:textColor="@android:color/white"
@@ -50,7 +51,8 @@
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/header_layout" />
+        app:layout_constraintTop_toBottomOf="@id/header_layout"
+        tools:ignore="Autofill,TextFields" />
 
     <HorizontalScrollView
         android:id="@+id/filters_scroll"
@@ -58,7 +60,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:scrollbars="none"
-        app:layout_constraintTop_toBottomOf="@id/search_input">
+        app:layout_constraintTop_toBottomOf="@id/searchInput">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -98,7 +100,7 @@
     </HorizontalScrollView>
 
     <TextView
-        android:id="@+id/txt_recent_title"
+        android:id="@+id/txtRecentTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -110,14 +112,14 @@
         app:layout_constraintTop_toBottomOf="@id/filters_scroll" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recent_searches_recycler"
+        android:id="@+id/searchRecyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txt_recent_title"
-        tools:listitem="@layout/list_item_search_history" />
+        app:layout_constraintTop_toBottomOf="@id/txtRecentTitle"
+        tools:listitem="@layout/list_item_event" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

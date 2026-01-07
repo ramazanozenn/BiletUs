@@ -1,3 +1,6 @@
+
+
+
 package com.biletus.app;
 
 import android.os.Bundle;
@@ -17,15 +20,13 @@ public class TicketSelectionFragment extends Fragment {
 
     private FragmentTicketSelectionBinding binding;
 
-    // Sayaçlar
     private int countStudent = 0;
     private int countAdult = 0;
 
-    // Fiyatlar
+
     private int priceStudent = 0;
     private int priceAdult = 0;
 
-    // ⚠️ YENİ EKLENEN: Etkinliği burada tutuyoruz
     private EventModel currentEvent;
 
     @Override
@@ -39,7 +40,6 @@ public class TicketSelectionFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // 1. Gelen Veriyi Al
         if (getArguments() != null) {
             currentEvent = (EventModel) getArguments().getSerializable("selected_event");
 
@@ -51,7 +51,6 @@ public class TicketSelectionFragment extends Fragment {
                     binding.imgEventSmall.setImageResource(currentEvent.getImageResourceId());
                 }
 
-                // Dinamik Fiyat Hesaplama
                 String rawPrice = currentEvent.getEventPrice();
                 priceAdult = parsePrice(rawPrice);
                 priceStudent = (priceAdult > 100) ? (priceAdult - 100) : (priceAdult / 2);
@@ -61,14 +60,12 @@ public class TicketSelectionFragment extends Fragment {
         binding.txtPriceStudentLabel.setText(priceStudent + " TL");
         binding.txtPriceAdultLabel.setText(priceAdult + " TL");
 
-        // Butonlar (Artı/Eksi)
         binding.btnStudentPlus.setOnClickListener(v -> { countStudent++; updateUI(); });
         binding.btnStudentMinus.setOnClickListener(v -> { if(countStudent>0) countStudent--; updateUI(); });
 
         binding.btnAdultPlus.setOnClickListener(v -> { countAdult++; updateUI(); });
         binding.btnAdultMinus.setOnClickListener(v -> { if(countAdult>0) countAdult--; updateUI(); });
 
-        // ÖDEME BUTONU (Güncellendi)
         binding.btnConfirmPayment.setOnClickListener(v -> {
             int total = (countStudent * priceStudent) + (countAdult * priceAdult);
             if (total == 0) {
@@ -78,7 +75,6 @@ public class TicketSelectionFragment extends Fragment {
 
             Bundle bundle = new Bundle();
             bundle.putInt("total_price", total);
-            // ⚠️ YENİ EKLENEN: Etkinlik bilgisini de gönderiyoruz!
             bundle.putSerializable("selected_event", currentEvent);
 
             Navigation.findNavController(v).navigate(R.id.action_ticketSelectionFragment_to_paymentFragment, bundle);

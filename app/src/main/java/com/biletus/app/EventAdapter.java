@@ -39,7 +39,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         holder.txtDate.setText(event.getEventDate() + " - " + event.getEventLocation());
         holder.imgEvent.setImageResource(event.getImageResourceId());
 
-        // KARTIN TAMAMINA TIKLAMA OLAYI
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onItemClick(event);
@@ -62,5 +61,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             txtDate = itemView.findViewById(R.id.txt_event_location);
             imgEvent = itemView.findViewById(R.id.img_event);
         }
+    }
+
+    public void setFilteredList(List<EventModel> filteredList) {
+        this.eventList = filteredList;
+        notifyDataSetChanged();
     }
 }
