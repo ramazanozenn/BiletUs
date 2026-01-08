@@ -12,12 +12,12 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation; // Navigasyon için gerekli
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.biletus.app.databinding.FragmentFavoritesBinding;
 
-import java.util.List; // Sadece List kullanıyoruz, ArrayList değil
+import java.util.List;
 
 public class FavoritesFragment extends Fragment {
 
